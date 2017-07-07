@@ -1,29 +1,26 @@
 
 
 
-
-
-
 ngOnChanges() {
-  const rowData = this.clusterdata;
+  const clusterRows = this.clusterdata;  
 
   this.logsTimeArr = [];
   this.data = [];
 
-  rowData.forEach(cluster => {      
-    const priority = cluster.priority;
+  clusterRows.forEach(clusterRow => {      
+    const priority = clusterRow.priority;
     const clusterData = {
       techLogs: [],
       priority: priority,
-      id: cluster.id
+      id: clusterRow.id
     };
-    cluster.techLogs.forEach(log => {  
-      const logDate = new Date(log.logDate);
+    clusterRow.techLogs.forEach(techLog => {
+      const logDate = new Date(techLog.logDate);
       clusterData.techLogs.push({    
         logDate: logDate,
-        ata: log.ata,
-        preprocessedText: log.preprocessedText,
-        text: log.rawText,
+        ata: techLog.ata,
+        preprocessedText: techLog.preprocessedText,
+        text: techLog.rawText,
         priority: priority
       });
 
