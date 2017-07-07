@@ -1,5 +1,6 @@
 
-// FP PEOPLE PREFERS DATA **TRANSFORMATION** OVER DATA **MUTATION**
+// FP PEOPLE PREFERS DATA TRANSFORMATION OVER DATA MUTATION
+// fn:: A -> B, means **map** values of A to B. SET THEORY ;)
 
 ngOnChanges() {
   const clusterRows = this.clusterdata;
@@ -7,35 +8,25 @@ ngOnChanges() {
   this.logsTimeArr = [];
   this.data = [];
 
-  clusterRows.forEach(clusterRow => {      
-    const priority = clusterRow.priority;
-    const clusterData = {
-      techLogs: [],
-      priority: priority,
-      id: clusterRow.id
-    };
-    clusterRow.techLogs.forEach(techLog => {  
-      const logDate = new Date(techLog.logDate);
-      clusterData.techLogs.push({    // <-- mutating
-        logDate: logDate,
-        ata: techLog.ata,
-        preprocessedText: techLog.preprocessedText,
-        text: techLog.rawText,
-        priority: priority
-      });
-
-      this.logsTimeArr.push(logDate); // <-- mutating
-    });
-    this.data.push(clusterData); // <-- mutating
-  });
+  // clusterRowsToModel :: ClusterRows -> Pair<ClusterModels, LogDates>
+  let { clusterModels, logDates } = clusterRowsToModel(clusterRows);
+  this.data = clusterModels;
+  this.logsTimeArr = logDates;
 
   if (this.startDate || this.endDate) {
-    this.logsTimeArr = [];                  // <-- mutating
-    this.logsTimeArr.push(this.endDate);    // <-- mutating
-    this.logsTimeArr.push(this.startDate);  // <-- mutating
+    this.logsTimeArr = [];                  
+    this.logsTimeArr.push(this.endDate);    
+    this.logsTimeArr.push(this.startDate); 
   }
 
   if (this.ele) {
     this.renderChart();
   }
+}
+
+// pure mathematical function which transforms A to B
+// clusterRowsToModel :: ClusterRows -> Pair<ClusterModels, LogDates>
+function clusterRowsToModel(clusterRows) {
+  // ... since it is pure now, we can easily detach it from its global(class) context
+  // ... welcome to clusterRowsToModel.js file !!
 }
