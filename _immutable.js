@@ -1,29 +1,29 @@
 
-// FP PEOPLE **LOVES** LIST TYPE AND STATES IT EXPLICITLY
-// x  :: X
-// xs :: List<X>
-// xss:: List<List<X>>
+
+
+
+
 
 ngOnChanges() {
-  const clusterRows = this.clusterdata;  // <-- rename 
+  const rowData = this.clusterdata;
 
   this.logsTimeArr = [];
   this.data = [];
 
-  clusterRows.forEach(clusterRow => {      // <-- rename
-    const priority = clusterRow.priority;
+  rowData.forEach(cluster => {      
+    const priority = cluster.priority;
     const clusterData = {
       techLogs: [],
       priority: priority,
-      id: clusterRow.id
+      id: cluster.id
     };
-    clusterRow.techLogs.forEach(techLog => {  // <-- rename
-      const logDate = new Date(techLog.logDate);
+    cluster.techLogs.forEach(log => {  
+      const logDate = new Date(log.logDate);
       clusterData.techLogs.push({    
         logDate: logDate,
-        ata: techLog.ata,
-        preprocessedText: techLog.preprocessedText,
-        text: techLog.rawText,
+        ata: log.ata,
+        preprocessedText: log.preprocessedText,
+        text: log.rawText,
         priority: priority
       });
 
