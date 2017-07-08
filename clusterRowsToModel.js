@@ -1,24 +1,25 @@
 
-// FP PEOPLE LOVES **COMPOSITION** OVER **MODELING**
-// FUNCTIONS ARE THE COMPOSABLE BLOCKS WHICH ARE COMPOSED TO
+// FP PEOPLE PREFERS **COMPOSITION** OVER **MODELING**
+// FUNCTIONS ARE CONSTRUCTION BLOCKS WHICH ARE COMPOSED TO
 // LARGER FUNCTIONS
-// fn1:: A -> B
-// fn2:: B -> C
-// fn3 = fn1 >> fn2 :: (A -> B >> B -> C), composed function
-// FP PEOPLE CONSIDERS FUNCTIONS AS COMPOSABLE **THINGS** LIKE LEGOS!
+// f:: A -> B
+// g:: B -> C
+// f.g = f >> g :: (A -> B >> B -> C), composed function
+// FP PEOPLE CONSIDERS FUNCTIONS AS COMPOSABLE **THINGS** LIKE LEGO BRICKS
 
-// it composed by [map, flatmap, clusterToModel] functions
+//f:: ClusterRows -> [ ClusterModels, LogDates ]
+// ...  composed by [map, flatmap, clusterToModel] functions
 function clusterRowsToModel(rows) {
   // bring FP to your language!
   let { map, flatMap } = require('lodash');
-  let clusterModels = map(rows, clusterToModel);
+  let clusterModels = map(rows, clusterToModel); // <-- Expression oriented
   
-  let allLogs = flatMap(clusterModels, 'techLogs');
-  let logDates = map(allLogs, 'logDate');
+  let allLogs = flatMap(clusterModels, 'techLogs'); // <-- Expression oriented
+  let logDates = map(allLogs, 'logDate');     // <-- Expression oriented
 
   // COMPOSITION IS EVERYWHERE!!
-  // FP PEOPLE COMPOSES LARGER DATA USING FROM SMALLER DATA
-  // A X B = Pair<A,B>    Cartesian product of sets A and B ;)
+  // FP PEOPLE COMPOSES LARGER DATA USING SMALLER DATA
+  // A X B = Pair<A,B>    Cartesian product of A and B, Set Theory ;)
 
   // ClusterModels X LogDates
   return {
@@ -27,7 +28,7 @@ function clusterRowsToModel(rows) {
   }
 }
 
-// Cluster -> ClusterModel
+// f:: Cluster -> ClusterModel
 function clusterToModel(cluster) {
   // ... another 
 }
