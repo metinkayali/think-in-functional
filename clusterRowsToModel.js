@@ -1,27 +1,19 @@
 
-// FP PEOPLE PREFERS **COMPOSITION** OVER **MODELING**
-// FUNCTIONS ARE CONSTRUCTION BLOCKS WHICH ARE COMPOSED TO
-// LARGER FUNCTIONS
-// f:: A -> B
-// g:: B -> C
-// f.g = f >> g :: (A -> B >> B -> C), composed function
-// FP PEOPLE CONSIDERS FUNCTIONS AS COMPOSABLE **THINGS** LIKE LEGO BRICKS
-
-//f:: ClusterRows -> [ ClusterModels, LogDates ]
-// ...  composed by [map, flatmap, clusterToModel] functions
+// REMEMBER THAT FUNCTIONS ARE **THINGS**
+// HIGHER-ORDER FUNCTIONS ARE FUNCTIONS THAT TAKE
+// FUNCTIONS AS PARAMETER OR RETURN FUNCTIONS AS VALUE
+// map:: [ A[], (A -> B) ] -> B[]
+// flatMap:: [ A[], (A -> B[]) ] -> B[]
+// [ map, flatMap ] are higher-order functions take function as parameter 
 function clusterRowsToModel(rows) {
-  // bring FP to your language!
   let { map, flatMap } = require('lodash');
-  let clusterModels = map(rows, clusterToModel); // <-- Expression oriented
+  let clusterModels = map(rows, clusterToModel); 
   
-  let allLogs = flatMap(clusterModels, 'techLogs'); // <-- Expression oriented
-  let logDates = map(allLogs, 'logDate');     // <-- Expression oriented
+  // ... notice that FP people are very concise
+  //     if there is a short way expressing intent, they prefer it
+  let allLogs = flatMap(clusterModels, 'techLogs'); 
+  let logDates = map(allLogs, 'logDate');     
 
-  // COMPOSITION IS EVERYWHERE!!
-  // FP PEOPLE COMPOSES LARGER DATA USING SMALLER DATA
-  // A X B = Pair<A,B>    Cartesian product of A and B, Set Theory ;)
-
-  // ClusterModels X LogDates
   return {
     clusterModels, 
     logDates
@@ -30,5 +22,27 @@ function clusterRowsToModel(rows) {
 
 // f:: Cluster -> ClusterModel
 function clusterToModel(cluster) {
-  // ... another 
+  let { extend, map } = require('lodash');
+  // ... FP people does not mutate data.
+  //     Notice that if we'd have mutated 'cluster' here,
+  //     like cluster.techLogs = ...
+  //     it wouldn't be functional programming.
+  let model = extend({}, cluster, {
+    techLogs = map(cluster.techLogs, techLogToModel(cluster))
+  });
+  return model;
+}
+
+// f:: Cluster -> (TechLog -> TechLogModel)
+// ... is a higher order function which takes a cluster and returns
+//     a function 
+function techLogToModel(cluster) {
+  return techLog => {
+    let { extend } = require('lodash');
+    let model = extend({}, techLog, {
+      priority: cluster.priority,
+      logDate: new Date(techLog.logDate)
+    });
+    return model;
+  }
 }
